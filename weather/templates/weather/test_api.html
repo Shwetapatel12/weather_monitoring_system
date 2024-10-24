@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>API Test</title>
+</head>
+<body>
+    <h1>OpenWeatherMap API Test</h1>
+
+    {% if weather_data %}
+        <h2>Weather in {{ weather_data.name }}</h2>
+        <p>Temperature: {{ weather_data.main.temp }} °C</p>
+        <p>Weather: {{ weather_data.weather.0.description }}</p>
+    {% else %}
+        <p>Could not retrieve weather data.</p>
+    {% endif %}
+</body>
+</html>

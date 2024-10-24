@@ -1,0 +1,84 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Weather Summary</title>
+    <link rel="stylesheet" href="{% static 'weather/styles.css' %}">
+</head>
+<body>
+    <header>
+        <h1>Weather Monitoring System</h1>
+        <nav>
+            <a href="{% url 'home' %}">Home</a>
+            <a href="{% url 'weather_summary' %}">Weather Summary</a>
+        </nav>
+    </header>
+    
+    <main>
+        <h2>Current Weather for Multiple Cities</h2>
+
+        <!-- Form for city input -->
+        <form method="GET" action="{% url 'weather_summary' %}">
+            <input type="text" name="cities" placeholder="Enter cities (comma separated)" {% if cities %} value="{{ cities }}" {% endif %} required>
+            <button type="submit">Get Weather</button>
+        </form>
+
+        <!-- {% if weather_data %}
+            <p><strong>Location:</strong> {{ weather_data.name }}</p>
+            <p><strong>Temperature:</strong> {{ weather_data.main.temp }} °C</p>
+            <p><strong>Weather:</strong> {{ weather_data.weather.0.description }}</p>
+        {% endif %} -->
+        
+        <!-- Loop through the weather_data_list and display weather for each city -->
+        {% if weather_data_list %}
+            <ul>
+                {% for weather in weather_data_list %}
+                    <li>
+                        <p><strong>Location:</strong> {{ weather.name }}</p>
+                        <p><strong>Temperature:</strong> {{ weather.main.temp }} °C</p>
+                        <p><strong>Feels like:</strong> {{ weather.main.feels_like }} °C</p>
+                        <p><strong>Weather Condition:</strong> {{ weather.weather.0.description }}</p>
+                    </li>
+                {% endfor %}
+            </ul>
+        {% else %}
+            <p>No weather data available.</p>
+        {% endif %}
+
+        <h2>Daily Weather Summary</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Date</th>
+                    <th>Average Temperature (°C)</th>
+                    <th>Max Temperature (°C)</th>
+                    <th>Min Temperature (°C)</th>
+                    <th>Dominant Condition</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for summary in summaries %}
+                    <tr>
+                        <td>{{ summary.date }}</td>
+                        <td>{{ summary.avg_temp }}</td>
+                        <td>{{ summary.max_temp }}</td>
+                        <td>{{ summary.min_temp }}</td>
+                        <td>{{ summary.dominant_condition }}</td>
+                    </tr>
+                {% empty %}
+                    <tr>
+                        <td colspan="5">No weather data available.</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </main>
+    
+    <footer>
+        <p>&copy; 2024 Weather Monitoring System</p>
+    </footer>
+</body>
+</html>
